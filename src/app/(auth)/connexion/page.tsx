@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Brand } from "@/components/site-header";
 import { LoginForm } from "@/features/auth/login-form";
 import { isAuthConfigured } from "@/server/auth";
+import { isPresentationMode } from "@/lib/deployment-mode";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Connexion professionnelle" };
 export default async function LoginPage() {
@@ -29,9 +30,11 @@ export default async function LoginPage() {
             role="status"
             className="mb-6 border border-orange-200 bg-orange-50 p-4 text-xs leading-6 text-orange-900"
           >
-            {t(
-              "Authentification non configurée. PostgreSQL et un secret local sont nécessaires. Aucun compte de démonstration ni accès automatique n’est fourni.",
-            )}
+            {isPresentationMode()
+              ? "Version de présentation pour validation. Les espaces client et administrateur seront activés lors de la mise en service."
+              : t(
+                  "Authentification non configurée. PostgreSQL et un secret local sont nécessaires. Aucun compte de démonstration ni accès automatique n’est fourni.",
+                )}
           </div>
         )}
         <LoginForm configured={configured} />

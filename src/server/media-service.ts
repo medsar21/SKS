@@ -1,4 +1,5 @@
 import "server-only";
+import { isPresentationMode } from "@/lib/deployment-mode";
 import { z } from "zod";
 import sharp from "sharp";
 import { getDb } from "./db";
@@ -20,6 +21,7 @@ export async function listMedia() {
   });
 }
 export async function getPublicMedia(id: string) {
+  if (isPresentationMode()) return null;
   if (!/^[a-zA-Z0-9_-]{1,100}$/.test(id) || !process.env.DATABASE_URL)
     return null;
   return getDb().mediaAsset.findUnique({ where: { id } });

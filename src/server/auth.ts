@@ -1,10 +1,12 @@
 import "server-only";
+import { isPresentationMode } from "@/lib/deployment-mode";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getDb } from "@/server/db";
 import { isDevelopmentAccountAllowed } from "@/lib/development-policy";
 
 export function isAuthConfigured(): boolean {
+  if (isPresentationMode()) return false;
   return Boolean(
     process.env.DATABASE_URL &&
     process.env.BETTER_AUTH_URL &&

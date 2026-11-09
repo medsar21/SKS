@@ -29,7 +29,7 @@
     "production:check": "node scripts/check-production.mjs",
     "admin:bootstrap": "node --conditions=react-server --import tsx src/server/cli/bootstrap-admin.ts",
     "admin:create": "node scripts/create-admin.mjs",
-    "build:vercel": "node scripts/check-production.mjs && prisma generate && prisma migrate deploy && next build"
+    "build:vercel": "node --import tsx scripts/build-vercel.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.9.2",

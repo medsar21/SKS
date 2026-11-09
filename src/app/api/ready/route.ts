@@ -1,6 +1,12 @@
 import { getDb } from "@/server/db";
+import { isPresentationMode } from "@/lib/deployment-mode";
 export const dynamic = "force-dynamic";
 export async function GET() {
+  if (isPresentationMode())
+    return Response.json(
+      { status: "ready", mode: "presentation", database: "disabled" },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   try {
     const db = getDb();
     await db.$queryRaw`SELECT 1`;

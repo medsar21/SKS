@@ -1,4 +1,5 @@
 import "server-only";
+import { isPresentationMode } from "@/lib/deployment-mode";
 import { createHash, randomUUID } from "node:crypto";
 import { getDb } from "@/server/db";
 import { requireAdmin } from "@/server/authorization";
@@ -13,6 +14,10 @@ export class QuoteRequestError extends Error {}
 
 // Entrée publique délibérée : aucun customerId ni prix fourni par le navigateur.
 export async function submitQuoteRequest(input: unknown) {
+  if (isPresentationMode())
+    throw new QuoteRequestError(
+      "Présentation client : aucune demande n’est envoyée ni enregistrée.",
+    );
   const data = quoteRequestSchema.parse(input);
   if (!process.env.DATABASE_URL)
     throw new QuoteRequestError(

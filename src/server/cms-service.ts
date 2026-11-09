@@ -1,4 +1,5 @@
 import "server-only";
+import { isPresentationMode } from "@/lib/deployment-mode";
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -31,6 +32,8 @@ const snapshotSchema = z.object({
   body: z.unknown(),
 });
 export const getSiteContent = cache(async () => {
+  if (isPresentationMode())
+    return { settings: defaultSettings, copy: {} as Record<string, string> };
   if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL)
     throw new Error(
       "Configurez DATABASE_URL avant le démarrage en production.",
@@ -58,7 +61,7 @@ export const getSiteContent = cache(async () => {
   return { settings, copy };
 });
 export async function getPublicEntry(kind: "PAGE" | "ARTICLE", slug: string) {
-  if (!process.env.DATABASE_URL) return null;
+  if (isPresentationMode() || !process.env.DATABASE_URL) return null;
   const entry = await getDb().contentEntry.findUnique({
     where: { key: `${kind.toLowerCase()}:${slug}` },
     select: { published: true, publishedAt: true },
@@ -72,7 +75,7 @@ export async function getPublicEntry(kind: "PAGE" | "ARTICLE", slug: string) {
   };
 }
 export async function getPublishedArticles() {
-  if (!process.env.DATABASE_URL) return [];
+  if (isPresentationMode() || !process.env.DATABASE_URL) return [];
   const records = await getDb().contentEntry.findMany({
     where: { kind: "ARTICLE", publishedAt: { not: null } },
     select: { key: true, published: true, publishedAt: true },

@@ -7,7 +7,7 @@ Ce projet nécessite **Node.js et PostgreSQL**. Un hébergement limité à PHP o
 1. Faire pointer le domaine vers le VPS et ouvrir les ports 80 et 443.
 2. Copier le projet et `.env.production.example` vers `.env.production` sur le serveur. Garder ce fichier privé (`chmod 600 .env.production`).
 3. Renseigner le domaine, l’origine HTTPS et les secrets. Générer deux secrets différents avec `openssl rand -hex 32` : un pour PostgreSQL et un pour Better Auth. Reprendre le mot de passe PostgreSQL dans `DATABASE_URL` ; encoder les caractères réservés si nécessaire. Ne jamais envoyer ces secrets dans une conversation ni les committer.
-4. Garder `SKS_CATALOGUE_SOURCE=prisma` et les trois autorisations `ALLOW_*` à `false`.
+4. Définir `SKS_SITE_MODE=production`, garder `SKS_CATALOGUE_SOURCE=prisma` et les trois autorisations `ALLOW_*` à `false`. Le dépôt utilise par défaut le mode de présentation sans base pour la validation client.
 
 Les commandes suivantes s’exécutent depuis la racine du projet :
 

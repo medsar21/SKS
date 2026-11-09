@@ -1,4 +1,5 @@
 import "server-only";
+import { isPresentationMode } from "@/lib/deployment-mode";
 import { getDb } from "@/server/db";
 import { demoCatalogProducts } from "@/features/catalog/demo-catalog";
 import { documentCatalogProducts } from "@/features/catalog/document-catalog";
@@ -9,6 +10,8 @@ import {
 } from "@/features/cms/validation";
 
 export async function getCatalog(): Promise<CatalogSource> {
+  if (isPresentationMode())
+    return { products: documentCatalogProducts, mode: "document" };
   // Activation explicite uniquement, aucune connexion automatique ni repli masquant une panne.
   if (
     process.env.NODE_ENV !== "production" &&

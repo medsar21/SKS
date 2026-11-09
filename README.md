@@ -6,6 +6,8 @@ Plateforme B2B pour SKS PROJETS · développement et intégration MNH Technologi
 
 Pour Vercel, suivre le [guide Vercel](deploy/VERCEL.md) : variables PostgreSQL et Better Auth, migrations au build et initialisation du contenu.
 
+**Validation client :** le mode par défaut est actuellement `presentation` dans `src/config/deployment.json`. Le déploiement Vercel fonctionne sans variables, sans base et sans compte. Les formulaires ne transmettent aucune demande. Pour la mise en service connectée après validation, définir `SKS_SITE_MODE=production` et configurer les variables du guide.
+
 Voir le [guide de déploiement](deploy/PRODUCTION.md) : configuration HTTPS/PostgreSQL, migrations, premier administrateur et import du PDF depuis le dashboard. Les variables requises sont dans `.env.production.example`. La production utilise exclusivement le catalogue en base.
 
 ## Démarrage local

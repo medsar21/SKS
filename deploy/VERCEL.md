@@ -1,5 +1,15 @@
 # Déployer SKS PROJETS sur Vercel
 
+## Validation client sans configuration
+
+Le mode versionné dans `src/config/deployment.json` est actuellement **presentation**. Un nouveau déploiement de `main` fonctionne sans aucune variable d’environnement : le site affiche le contenu du PDF, le catalogue, les photos, le formulaire de préparation téléchargeable et le favicon. Le build ne vérifie aucun secret, n’applique aucune migration et ne contacte aucune base. Les accès privés et les enregistrements de devis sont désactivés, même si une URL de base est présente. L’indexation par les moteurs est désactivée.
+
+Dans Vercel, conserver les commandes du dépôt et redéployer le dernier commit de `main`. Aucun PostgreSQL n’est nécessaire pour cette validation visuelle.
+
+## Activer ensuite le site connecté
+
+Après validation client, définir **`SKS_SITE_MODE=production`** dans Vercel, ainsi que les variables ci-dessous, puis redéployer. Ce choix active les contrôles stricts et les migrations. Une panne de configuration dans ce mode ne provoque jamais un repli silencieux vers la présentation.
+
 Le dépôt est préparé pour le preset **Next.js**, à la racine du projet, avec **Node.js 24.x**. `vercel.json` définit `npm ci --include=dev` (les outils Prisma et TypeScript sont nécessaires au build) et `npm run build:vercel`. Laisser le répertoire de sortie par défaut ; ne pas sélectionner un export statique. Vercel n’utilise ni Docker Compose ni `npm start`.
 
 ## Variables à renseigner avant le déploiement
