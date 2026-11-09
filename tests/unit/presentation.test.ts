@@ -22,7 +22,8 @@ afterEach(() => {
 });
 describe("présentation client isolée des services connectés", () => {
   it("utilise le mode versionné et exige une sélection valide", () => {
-    expect(isPresentationMode({})).toBe(true);
+    expect(isPresentationMode({})).toBe(false);
+    expect(isPresentationMode({ SKS_SITE_MODE: "presentation" })).toBe(true);
     expect(isPresentationMode({ SKS_SITE_MODE: "production" })).toBe(false);
     expect(() => isPresentationMode({ SKS_SITE_MODE: "typo" })).toThrow();
   });

@@ -16,7 +16,10 @@ export async function GET() {
       select: { publishedAt: true },
     });
     return Response.json(
-      { status: settings?.publishedAt ? "ready" : "setup-required" },
+      {
+        status: settings?.publishedAt ? "ready" : "setup-required",
+        mode: "production",
+      },
       {
         status: settings?.publishedAt ? 200 : 503,
         headers: { "Cache-Control": "no-store" },
@@ -24,7 +27,7 @@ export async function GET() {
     );
   } catch {
     return Response.json(
-      { status: "unavailable" },
+      { status: "unavailable", mode: "production" },
       { status: 503, headers: { "Cache-Control": "no-store" } },
     );
   }

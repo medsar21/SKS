@@ -2,9 +2,9 @@
 
 ## Validation client sans configuration
 
-Le mode versionné dans `src/config/deployment.json` est actuellement **presentation**. Un nouveau déploiement de `main` fonctionne sans aucune variable d’environnement : le site affiche le contenu du PDF, le catalogue, les photos, le formulaire de préparation téléchargeable et le favicon. Le build ne vérifie aucun secret, n’applique aucune migration et ne contacte aucune base. Les accès privés et les enregistrements de devis sont désactivés, même si une URL de base est présente. L’indexation par les moteurs est désactivée.
+Le mode versionné dans `src/config/deployment.json` est désormais **production**. Pour une validation visuelle sans base, définir explicitement `SKS_SITE_MODE=presentation` dans l’environnement concerné. Ce mode affiche le contenu du PDF et désactive les accès privés et les enregistrements de devis, même si une URL de base est présente. Son build ne contacte aucune base et n’applique aucune migration.
 
-Dans Vercel, conserver les commandes du dépôt et redéployer le dernier commit de `main`. Aucun PostgreSQL n’est nécessaire pour cette validation visuelle.
+Dans Vercel, conserver les commandes du dépôt et déployer le dernier commit de `main`. Aucun PostgreSQL n’est nécessaire pour ce mode de présentation explicite.
 
 ## Activer ensuite le site connecté
 

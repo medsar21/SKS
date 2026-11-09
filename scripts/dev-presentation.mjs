@@ -8,7 +8,12 @@ const child = spawn(
   [require.resolve("next/dist/bin/next"), "dev", ...process.argv.slice(2)],
   {
     stdio: "inherit",
-    env: { ...process.env, DATABASE_URL: "", SKS_CATALOGUE_SOURCE: "document" },
+    env: {
+      ...process.env,
+      SKS_SITE_MODE: "presentation",
+      DATABASE_URL: "",
+      SKS_CATALOGUE_SOURCE: "document",
+    },
   },
 );
 child.on("error", (error) => {
