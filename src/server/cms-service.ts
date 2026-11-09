@@ -8,6 +8,10 @@ import { requireSession } from "./authorization";
 import { getDb } from "./db";
 import { copyGroups } from "@/features/cms/copy-defaults";
 import {
+  defaultReferences,
+  referencesSchema,
+} from "@/features/references/content";
+import {
   defaultSettings,
   settingsSchema,
   entryInputSchema,
@@ -33,23 +37,34 @@ const snapshotSchema = z.object({
 });
 export const getSiteContent = cache(async () => {
   if (isPresentationMode())
-    return { settings: defaultSettings, copy: {} as Record<string, string> };
+    return {
+      settings: defaultSettings,
+      copy: {} as Record<string, string>,
+      references: defaultReferences,
+    };
   if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL)
     throw new Error(
       "Configurez DATABASE_URL avant le démarrage en production.",
     );
   if (!process.env.DATABASE_URL)
-    return { settings: defaultSettings, copy: {} as Record<string, string> };
+    return {
+      settings: defaultSettings,
+      copy: {} as Record<string, string>,
+      references: defaultReferences,
+    };
   const entries = await getDb().contentEntry.findMany({
     where: { kind: { in: ["COPY", "SETTINGS"] }, publishedAt: { not: null } },
     select: { key: true, published: true },
   });
   let settings = defaultSettings;
+  let references = defaultReferences;
   const copy: Record<string, string> = {};
   for (const entry of entries) {
     const data = snapshotSchema.parse(entry.published);
     if (entry.key === "settings:site")
       settings = settingsSchema.parse(data.body);
+    else if (entry.key === "settings:references")
+      references = referencesSchema.parse(data.body);
     else if (entry.key.startsWith("copy:")) {
       const group = entry.key.slice(5);
       for (const [original, value] of Object.entries(
@@ -58,7 +73,7 @@ export const getSiteContent = cache(async () => {
         copy[`${group}:${original}`] = value;
     }
   }
-  return { settings, copy };
+  return { settings, copy, references };
 });
 export async function getPublicEntry(kind: "PAGE" | "ARTICLE", slug: string) {
   if (isPresentationMode() || !process.env.DATABASE_URL) return null;
@@ -115,7 +130,13 @@ export async function getEntryEditor(
   const group = id.startsWith("copy-") ? id.slice(5) : null;
   if (group && !copyGroups[group]) return null;
   const systemKey =
-    id === "site" ? "settings:site" : group ? `copy:${group}` : null;
+    id === "site"
+      ? "settings:site"
+      : id === "references"
+        ? "settings:references"
+        : group
+          ? `copy:${group}`
+          : null;
   const record = await getDb().contentEntry.findUnique({
     where: systemKey ? { key: systemKey } : { id },
     include: {
@@ -132,7 +153,9 @@ export async function getEntryEditor(
       key: record.key.split(":").slice(1).join(":"),
       body:
         record.kind === "SETTINGS"
-          ? settingsSchema.parse(record.body)
+          ? record.key === "settings:references"
+            ? referencesSchema.parse(record.body)
+            : settingsSchema.parse(record.body)
           : (record.body as unknown),
       published: Boolean(record.published),
       updatedAt: record.updatedAt.toISOString(),
@@ -147,20 +170,31 @@ export async function getEntryEditor(
   if (!systemKey && id !== "nouveau") return null;
   return {
     id: undefined,
-    key: group ?? (id === "site" ? "site" : ""),
-    kind:
-      id === "site" ? ("SETTINGS" as const) : group ? ("COPY" as const) : kind,
+    key: group ?? (["site", "references"].includes(id) ? id : ""),
+    kind: ["site", "references"].includes(id)
+      ? ("SETTINGS" as const)
+      : group
+        ? ("COPY" as const)
+        : kind,
     title:
-      id === "site" ? "Paramètres du site" : group ? `Textes · ${group}` : "",
+      id === "references"
+        ? "Nos références"
+        : id === "site"
+          ? "Paramètres du site"
+          : group
+            ? `Textes · ${group}`
+            : "",
     summary: "",
     body:
-      id === "site"
-        ? defaultSettings
-        : group
-          ? Object.fromEntries(
-              copyGroups[group]!.map((item) => [item.value, item.value]),
-            )
-          : emptyPageBody,
+      id === "references"
+        ? defaultReferences
+        : id === "site"
+          ? defaultSettings
+          : group
+            ? Object.fromEntries(
+                copyGroups[group]!.map((item) => [item.value, item.value]),
+              )
+            : emptyPageBody,
     published: false,
     revision: 0,
     revisions: [],
@@ -168,6 +202,7 @@ export async function getEntryEditor(
 }
 function parseBody(kind: ContentKind, key: string, body: unknown) {
   if (kind === "SETTINGS") {
+    if (key === "references") return referencesSchema.parse(body);
     if (key !== "site") throw new CmsError("Paramètre inconnu.");
     return settingsSchema.parse(body);
   }

@@ -8,18 +8,25 @@ import {
   type ReactNode,
 } from "react";
 import { defaultSettings, type SiteSettings } from "./validation";
+import {
+  defaultReferences,
+  type ReferenceContent,
+} from "@/features/references/content";
 
 const SiteContext = createContext<{
   copy: Record<string, string>;
   settings: SiteSettings;
-}>({ copy: {}, settings: defaultSettings });
+  references: ReferenceContent;
+}>({ copy: {}, settings: defaultSettings, references: defaultReferences });
 export function SiteContentProvider({
   copy,
   settings,
+  references = defaultReferences,
   children,
 }: {
   copy: Record<string, string>;
   settings: SiteSettings;
+  references?: ReferenceContent;
   children: ReactNode;
 }) {
   useEffect(() => {
@@ -31,7 +38,7 @@ export function SiteContentProvider({
     };
   }, [settings.locale]);
   return (
-    <SiteContext.Provider value={{ copy, settings }}>
+    <SiteContext.Provider value={{ copy, settings, references }}>
       <div
         style={
           {
@@ -48,10 +55,11 @@ export function SiteContentProvider({
   );
 }
 export function useSiteContent(group?: string) {
-  const { copy, settings } = useContext(SiteContext);
+  const { copy, settings, references } = useContext(SiteContext);
   return {
     t: (original: string) => copy[`${group}:${original}`] ?? original,
     settings,
+    references,
   };
 }
 export function CopyText({ text }: { text: string }) {

@@ -23,6 +23,7 @@ const links = [
   { href: "/admin/produits", label: "Produits", icon: Package },
   { href: "/admin/categories", label: "Catégories", icon: FolderTree },
   { href: "/admin/medias", label: "Médiathèque", icon: ImageIcon },
+  { href: "/admin/references", label: "Nos références", icon: ImageIcon },
   { href: "/admin/devis", label: "Demandes de devis", icon: ClipboardList },
   { href: "/admin/edition/site", label: "Paramètres du site", icon: Settings },
   { href: "/admin/historique", label: "Journal d’activité", icon: History },

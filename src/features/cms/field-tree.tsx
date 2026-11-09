@@ -9,6 +9,9 @@ export type MediaChoice = {
   name: string;
 };
 const labels: Record<string, string> = {
+  logos: "Logos des références",
+  heading: "Titre de section",
+  description: "Description",
   hero: "Bannière principale",
   indexSearchEngines: "Autoriser l’indexation par les moteurs de recherche",
   brand: "Nom / sigle",
@@ -62,7 +65,7 @@ const labels: Record<string, string> = {
   homeSections: "Ordre et visibilité des sections d’accueil",
   homeSolutions: "Solutions présentées à l’accueil",
   homeBenefits: "Avantages et approche",
-  homeJourneys: "Parcours vente et location",
+  homeJourneys: "Services (page Services)",
   title: "Titre",
   subtitle: "Sous-titre",
   number: "Numéro affiché",
@@ -94,12 +97,14 @@ const sectionLabels: Record<string, string> = {
   presentation: "Présentation",
   solutions: "Solutions",
   equipements: "Sélection du catalogue",
-  "vente-location": "Vente et location",
+  references: "Nos références",
+  "vente-location": "Nos références",
   approche: "Approche",
   devis: "Appel au devis",
   contact: "Contact",
 };
 function template(key: string): JsonValue {
+  if (key === "logos") return { name: "", src: "" };
   if (
     [
       "services",
@@ -297,7 +302,12 @@ export function FieldTree({
             className="cms-secondary"
             onClick={() => onChange([...value, template(field)])}
           >
-            + Ajouter {field === "blocks" ? "un bloc" : "un élément"}
+            + Ajouter{" "}
+            {field === "blocks"
+              ? "un bloc"
+              : field === "logos"
+                ? "un logo"
+                : "un élément"}
           </button>
         )}
       </fieldset>

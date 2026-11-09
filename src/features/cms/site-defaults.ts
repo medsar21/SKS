@@ -36,6 +36,11 @@ export const defaultSiteMedia = {
   },
 };
 export const defaultPageSeo = {
+  services: {
+    title: "Nos services",
+    description:
+      "Vente, location et assistance technique pour vos chantiers. Découvrez les services SKS PROJETS.",
+  },
   about: {
     title: "À propos de SKS PROJETS",
     description: companyContent.about,

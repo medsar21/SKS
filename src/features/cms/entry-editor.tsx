@@ -95,7 +95,12 @@ export function EntryEditor({
                 ? "Publication retirée. Le brouillon est conservé."
                 : "Brouillon enregistré. La version publique reste inchangée.",
           );
-          router.replace(`/admin/edition/${result.id}`, { scroll: false });
+          router.replace(
+            entry.kind === "SETTINGS" && key === "references"
+              ? "/admin/references"
+              : `/admin/edition/${result.id}`,
+            { scroll: false },
+          );
           router.refresh();
         }
       } catch {
@@ -112,7 +117,9 @@ export function EntryEditor({
         <div>
           <p className="eyebrow">
             {entry.kind === "SETTINGS"
-              ? "IDENTITÉ & CONFIGURATION"
+              ? key === "references"
+                ? "LOGOS & RÉFÉRENCES"
+                : "IDENTITÉ & CONFIGURATION"
               : entry.kind === "COPY"
                 ? "CONTENUS DU SITE"
                 : entry.kind === "ARTICLE"
@@ -123,7 +130,9 @@ export function EntryEditor({
             {entry.kind === "COPY"
               ? `Textes · ${key}`
               : entry.kind === "SETTINGS"
-                ? "Paramètres du site"
+                ? key === "references"
+                  ? "Nos références"
+                  : "Paramètres du site"
                 : id
                   ? "Modifier le contenu"
                   : "Créer un contenu"}

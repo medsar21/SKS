@@ -1,6 +1,6 @@
 ﻿import { expect, test } from "@playwright/test";
 
-test("accueil conforme à la référence : héros, services, catégories et responsive", async ({
+test("accueil : héros, lien Services, catégories et responsive", async ({
   page,
 }, testInfo) => {
   const errors: string[] = [];
@@ -11,15 +11,10 @@ test("accueil conforme à la référence : héros, services, catégories et resp
   await expect(main.getByRole("heading", { level: 1 })).toHaveText(
     "DES SOLUTIONSDE CONSTRUCTIONFIABLES ET PERFORMANTES",
   );
+  await expect(page.locator("#vente-location")).toHaveCount(0);
   await expect(
-    page.locator("#vente-location").getByRole("article"),
-  ).toHaveCount(3);
-  for (const name of ["Vente", "Location", "Assistance technique"])
-    await expect(
-      page
-        .locator("#vente-location")
-        .getByRole("heading", { name, exact: true }),
-    ).toBeVisible();
+    main.getByRole("link", { name: "Nos services", exact: true }),
+  ).toHaveAttribute("href", "/services");
   await expect(
     page
       .locator("#equipements")
@@ -81,7 +76,7 @@ test("les trois services ouvrent le contact et les coordonnées", async ({
   page,
 }) => {
   for (const id of ["vente", "location", "assistance"]) {
-    await page.goto("/");
+    await page.goto("/services");
     await page.locator(`#${id}`).getByRole("link").click();
     await expect(page).toHaveURL(/\/contact$/);
     await expect(

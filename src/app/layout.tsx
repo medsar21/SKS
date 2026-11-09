@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSiteContent } from "@/server/cms-service";
 import { SiteContentProvider } from "@/features/cms/site-content";
 import { BrandIntro } from "@/components/brand-intro";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import "./globals.css";
 export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,6 +32,7 @@ export default async function RootLayout({
     >
       <body>
         <SiteContentProvider {...content}>
+          <ScrollToTop />
           <BrandIntro />
           <a href="#main" className="skip-link">
             Aller au contenu

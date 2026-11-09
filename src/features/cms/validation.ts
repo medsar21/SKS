@@ -49,7 +49,12 @@ export const slugSchema = z
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     "Lien : minuscules, chiffres et tirets uniquement.",
   );
-const menuLink = z.object({ label: short, href: safeLink });
+const menuLink = z.object({
+  label: short,
+  href: safeLink.transform((href) =>
+    ["/#vente-location", "#vente-location"].includes(href) ? "/services" : href,
+  ),
+});
 export const managedImageSchema = z
   .object({ src: imagePath, alt: z.string().max(500) })
   .refine(
@@ -97,6 +102,7 @@ export const settingsSchema = z.object({
       projects: seoPage,
       contact: seoPage,
       catalog: seoPage,
+      services: seoPage.default(defaultPageSeo.services),
     })
     .default(defaultPageSeo),
   tagline: z.string().max(250),
@@ -119,20 +125,29 @@ export const settingsSchema = z.object({
   seoDescription: z.string().max(500),
   homeSections: z
     .array(
-      z.object({
-        id: z.enum([
-          "hero",
-          "notice",
-          "presentation",
-          "solutions",
-          "equipements",
-          "vente-location",
-          "approche",
-          "devis",
-          "contact",
-        ]),
-        visible: z.boolean(),
-      }),
+      z
+        .object({
+          id: z.enum([
+            "hero",
+            "notice",
+            "presentation",
+            "solutions",
+            "equipements",
+            "vente-location",
+            "references",
+            "approche",
+            "devis",
+            "contact",
+          ]),
+          visible: z.boolean(),
+        })
+        .transform((section) => ({
+          ...section,
+          id:
+            section.id === "vente-location"
+              ? ("references" as const)
+              : section.id,
+        })),
     )
     .length(9)
     .refine(
@@ -176,7 +191,7 @@ export const defaultSettings: SiteSettings = {
   navigation: [
     { label: "Accueil", href: "/" },
     { label: "À propos", href: "/a-propos" },
-    { label: "Services", href: "/#vente-location" },
+    { label: "Services", href: "/services" },
     { label: "Produits", href: "/catalogue" },
     { label: "Domaines", href: "/projets" },
     { label: "Contact", href: "/contact" },
@@ -204,7 +219,7 @@ export const defaultSettings: SiteSettings = {
   homeSections: [
     "hero",
     "notice",
-    "vente-location",
+    "references",
     "equipements",
     "presentation",
     "solutions",
@@ -286,6 +301,7 @@ export const reservedSlugs = new Set([
   "contact",
   "a-propos",
   "projets",
+  "services",
   "demande-de-devis",
   "_next",
   "favicon",

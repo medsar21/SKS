@@ -8,7 +8,6 @@ import {
   Headphones,
   Layers3,
   ShieldCheck,
-  ShoppingCart,
   Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,7 @@ import { HomeSections, useSiteContent } from "@/features/cms/site-content";
 
 import type { CatalogProduct } from "@/features/catalog/types";
 import styles from "./home-page.module.css";
+import { ReferenceMarquee } from "@/features/references/reference-marquee";
 
 const valueIcons = [ShieldCheck, Layers3, Truck, Headphones];
 export function HomePage({ products }: { products: CatalogProduct[] }) {
@@ -77,7 +77,7 @@ export function HomePage({ products }: { products: CatalogProduct[] }) {
                 </Link>
               </Button>
               <Button asChild variant="outline" className={styles.secondary}>
-                <a href="#vente-location">{t("Nos services")}</a>
+                <Link href="/services">{t("Nos services")}</Link>
               </Button>
             </div>
             <span className={styles.sourceLabel}>
@@ -105,65 +105,7 @@ export function HomePage({ products }: { products: CatalogProduct[] }) {
             })}
           </Container>
         </section>
-        <section
-          id="vente-location"
-          className={styles.services}
-          aria-labelledby="services-title"
-        >
-          <Container>
-            <Reveal>
-              <div className={styles.sectionHead}>
-                <div>
-                  <p className={styles.eyebrow}>{t("NOS SERVICES")}</p>
-                  <h2 id="services-title">
-                    {t("Un accompagnement complet")}
-                    <br />
-                    {t("pour vos chantiers")}
-                  </h2>
-                </div>
-                <p>
-                  {t(
-                    "Vente de matériel, location de matériel, assistance technique et accompagnement chantier.",
-                  )}
-                </p>
-              </div>
-              <div className={styles.serviceGrid}>
-                {settings.homeJourneys.map((configured, index) => {
-                  const { id, title, text } = configured;
-                  const Icon = [ShoppingCart, ClipboardList, Headphones][
-                    index % 3
-                  ]!;
-                  return (
-                    <article id={id} key={id} className={styles.serviceCard}>
-                      <div className={styles.serviceMedia}>
-                        <Image
-                          src={configured.image.src}
-                          alt={configured.image.alt || title}
-                          width={650}
-                          height={400}
-                          sizes="(max-width:640px) 100vw, 33vw"
-                        />
-                        <span>
-                          <Icon size={26} aria-hidden="true" />
-                        </span>
-                      </div>
-                      <div className={styles.serviceBody}>
-                        <h3>{t(title)}</h3>
-                        <p>{t(text)}</p>
-                        <Link
-                          href={configured.href}
-                          aria-label={`${t("Nous contacter")} : ${t(configured?.title ?? title)}`}
-                        >
-                          <ArrowRight size={18} aria-hidden="true" />
-                        </Link>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </Reveal>
-          </Container>
-        </section>
+        <ReferenceMarquee id="references" />
         <section
           id="equipements"
           className={styles.categories}
