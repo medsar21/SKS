@@ -1,0 +1,53 @@
+.effects {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cursor {
+  position: absolute;
+  inset: 0 auto auto 0;
+  opacity: 0;
+  font-size: 25px;
+  line-height: 1;
+  filter: drop-shadow(0 3px 4px #101d2e30);
+}
+
+.cursor[data-interactive="true"] {
+  filter: drop-shadow(0 0 6px #f59e0b99);
+}
+
+.ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px #f59e0b18;
+  animation: click-wave 550ms ease-out forwards;
+}
+
+@keyframes click-wave {
+  from {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0.25);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effects {
+    display: none;
+  }
+}

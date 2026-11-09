@@ -1,0 +1,105 @@
+﻿/* Habillage commun des espaces protégés. Les contrôles d’accès restent dans les layouts serveur. */
+.workspace-shell {
+  background: #f5f5f2;
+}
+.workspace-shell .workspace-sidebar {
+  background: #111315;
+  padding: 24px 18px;
+  border-inline-end: 1px solid #303437;
+}
+.workspace-shell .workspace-sidebar .brand {
+  width: 112px;
+  padding: 6px 9px;
+  border-radius: 5px;
+  margin-bottom: 16px;
+}
+.workspace-shell .workspace-label {
+  color: #c3c8ca;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+.workspace-shell .workspace-link {
+  min-height: 42px;
+  border-radius: 6px;
+  padding: 11px 12px;
+  color: #d2d7d9;
+  font-size: 12px;
+}
+.workspace-shell .workspace-link:hover {
+  background: #ffffff0d;
+}
+.workspace-shell .workspace-link[aria-current="page"] {
+  background: var(--accent);
+  color: #111315;
+  box-shadow: none;
+  font-weight: 700;
+}
+.workspace-shell .workspace-header {
+  background: #fff;
+  border-bottom: 1px solid #e0e3e4;
+  min-height: 76px;
+}
+.workspace-shell .workspace-content {
+  padding: 32px;
+}
+.workspace-shell h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.workspace-shell :is(.cms-panel, .cms-stat, .cms-table-wrap, .panel) {
+  border: 1px solid #d9dddf;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px #11131505;
+}
+.workspace-shell .cms-stat {
+  padding: 20px;
+}
+.workspace-shell .cms-stat strong {
+  color: #111315;
+  font-size: 32px;
+}
+.workspace-shell .cms-stat svg {
+  color: #946600;
+}
+.workspace-shell .cms-page-heading {
+  margin-bottom: 24px;
+}
+.workspace-shell :is(.cms-primary, .cms-secondary) {
+  border-radius: 6px;
+}
+.workspace-shell .cms-primary {
+  background: var(--accent);
+  color: #111315;
+  border-color: var(--accent);
+}
+.workspace-shell th {
+  background: #f4f5f3;
+  color: #454e53;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+.workspace-shell td {
+  font-size: 12px;
+}
+.workspace-shell .cms-badge {
+  border-radius: 4px;
+}
+.workspace-shell .workspace-footer {
+  font-size: 10px;
+  color: #737c81;
+}
+@media (max-width: 900px) {
+  .workspace-shell .workspace-content {
+    padding: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .workspace-shell .workspace-content {
+    padding: 18px;
+  }
+  .workspace-shell .workspace-sidebar {
+    padding: 20px;
+  }
+}

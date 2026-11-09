@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "developmentOnly" BOOLEAN NOT NULL DEFAULT false;

@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.next-test/
+out/
+coverage/
+playwright-report/
+test-results/
+test-results-public/
+.env*
+!.env.example
+!.env.production.example
+src/generated/
+*.tsbuildinfo
+*.log
