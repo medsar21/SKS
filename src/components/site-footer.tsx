@@ -41,7 +41,7 @@ export function SiteFooter() {
             <ul className="footer-links">
               {settings.footerLinks.map((link, index) => (
                 <li key={`${link.href}-${index}`}>
-                  <Link href={link.href}>{link.label}</Link>
+                  <a href={link.href}>{link.label}</a>
                 </li>
               ))}
             </ul>

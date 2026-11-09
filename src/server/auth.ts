@@ -4,6 +4,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getDb } from "@/server/db";
 import { isDevelopmentAccountAllowed } from "@/lib/development-policy";
+import { getTrustedAuthOrigins } from "@/lib/auth-origins";
 
 export function isAuthConfigured(): boolean {
   if (isPresentationMode()) return false;
@@ -22,12 +23,10 @@ function createAuth() {
     database: prismaAdapter(getDb(), { provider: "postgresql" }),
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
-    trustedOrigins: [
+    trustedOrigins: getTrustedAuthOrigins(
       process.env.BETTER_AUTH_URL!,
-      ...(process.env.NODE_ENV === "development"
-        ? ["http://localhost:3000", "http://127.0.0.1:3000"]
-        : []),
-    ],
+      process.env.NODE_ENV,
+    ),
     emailAndPassword: {
       enabled: true,
       disableSignUp: true,

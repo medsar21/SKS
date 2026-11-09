@@ -1,5 +1,5 @@
 "use client";
-import {useSiteContent} from "@/features/cms/site-content";
+import { useSiteContent } from "@/features/cms/site-content";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ const schema = z.object({
 });
 type Values = z.infer<typeof schema>;
 export function LoginForm({ configured }: { configured: boolean }) {
-const {t}=useSiteContent("autres");
+  const { t } = useSiteContent("autres");
 
   const router = useRouter();
   const [error, setError] = useState("");
@@ -30,10 +30,19 @@ const {t}=useSiteContent("autres");
         body: JSON.stringify(values),
       });
       if (!response.ok) {
+        const errorBody: unknown = await response.json().catch(() => null);
+        const invalidOrigin =
+          response.status === 403 &&
+          errorBody !== null &&
+          typeof errorBody === "object" &&
+          "code" in errorBody &&
+          errorBody.code === "INVALID_ORIGIN";
         setError(
-          response.status === 429
-            ? "Trop de tentatives. Réessayez dans une minute."
-            : "Connexion impossible. Vérifiez vos identifiants ou contactez votre administrateur.",
+          invalidOrigin
+            ? "Ce domaine n’est pas autorisé pour la connexion. Contactez l’administrateur."
+            : response.status === 429
+              ? "Trop de tentatives. Réessayez dans une minute."
+              : "Connexion impossible. Vérifiez vos identifiants ou contactez votre administrateur.",
         );
         return;
       }
@@ -47,7 +56,8 @@ const {t}=useSiteContent("autres");
     <form method="post" onSubmit={handleSubmit(submit)} noValidate>
       <fieldset disabled={!configured || isSubmitting}>
         <label className="form-label" htmlFor="email">
-          {t("Email professionnel")}<input
+          {t("Email professionnel")}
+          <input
             {...register("email")}
             id="email"
             type="email"
@@ -63,7 +73,8 @@ const {t}=useSiteContent("autres");
           )}
         </label>
         <label className="form-label" htmlFor="password">
-          {t("Mot de passe")}<input
+          {t("Mot de passe")}
+          <input
             {...register("password")}
             id="password"
             type="password"
