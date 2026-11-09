@@ -3,6 +3,7 @@ import { z } from "zod";
 import sharp from "sharp";
 import { getDb } from "./db";
 import { CmsError, requireContentAdmin } from "./cms-service";
+import { MAX_MEDIA_BYTES, MAX_MEDIA_LABEL } from "@/features/cms/media-limits";
 
 export async function listMedia() {
   await requireContentAdmin();
@@ -27,8 +28,10 @@ export async function uploadMediaRecord(data: FormData) {
   const session = await requireContentAdmin();
   const file = data.get("file");
   const alt = z.string().trim().min(1).max(500).parse(data.get("alt"));
-  if (!(file instanceof File) || !file.size || file.size > 5 * 1024 * 1024)
-    throw new CmsError("Choisissez une image ou un PDF de 5 Mo maximum.");
+  if (!(file instanceof File) || !file.size || file.size > MAX_MEDIA_BYTES)
+    throw new CmsError(
+      `Choisissez une image ou un PDF de ${MAX_MEDIA_LABEL} maximum.`,
+    );
   let buffer = Buffer.from(await file.arrayBuffer());
   let mimeType: string;
   if (
@@ -65,6 +68,10 @@ export async function uploadMediaRecord(data: FormData) {
     }
     mimeType = "image/webp";
   }
+  if (buffer.length > MAX_MEDIA_BYTES)
+    throw new CmsError(
+      `L’image optimisée dépasse ${MAX_MEDIA_LABEL}. Réduisez ses dimensions.`,
+    );
   const name = z
     .string()
     .min(1)

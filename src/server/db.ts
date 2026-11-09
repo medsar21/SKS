@@ -12,6 +12,8 @@ export function getDb(): PrismaClient {
       adapter: new PrismaPg({
         connectionString: process.env.DATABASE_URL,
         connectionTimeoutMillis: 5000,
+        max: process.env.VERCEL === "1" ? 3 : 10,
+        idleTimeoutMillis: 20_000,
       }),
     });
   globalDb.sksPrisma = client;

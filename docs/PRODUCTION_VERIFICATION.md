@@ -11,3 +11,9 @@ Après mise à jour de `fast-uri`, `npm audit --omit=dev` ne signale aucune vuln
 La configuration Docker, PostgreSQL et Caddy est fournie avec le [guide de mise en production](../deploy/PRODUCTION.md). Docker n’est pas disponible sur ce poste : la construction Linux des images et l’obtention du certificat HTTPS devront être vérifiées sur le serveur cible. Aucun déploiement externe n’a été effectué. Les variables et secrets réels de l’hébergement restent à renseigner. L’envoi d’emails SMTP et les traductions complètes ne sont pas configurés.
 
 Les anciens rapports présents dans `docs/` décrivent les étapes historiques du projet ; ce document précise le périmètre des contrôles de préparation à l’hébergement.
+
+## Adaptation Vercel
+
+Le build a aussi réussi sous Node.js 24 avec `VERCEL=1`, après validation de la configuration, génération de Prisma et exécution de `migrate deploy` sur la base isolée. Les traces de déploiement des routes `/admin` et `/icon` incluent chacune les 34 images sources nécessaires. Le parcours navigateur administrateur a été relancé avec succès après adaptation des téléversements à 3 Mo. Le favicon retourne bien une image PNG.
+
+Le [guide Vercel](../deploy/VERCEL.md) détaille les variables et le premier démarrage. Aucun projet Vercel réel ni sa base distante n’ont été connectés ou déployés pendant ces vérifications.

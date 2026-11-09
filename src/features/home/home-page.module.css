@@ -263,10 +263,13 @@
 .categoryCard {
   min-width: 0;
   background: #242729;
-  border: 1px solid #414548;
-  border-radius: 7px;
+  border: 1px solid #ffffff24;
+  border-radius: 4px;
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 .categoryCard img {
   width: 100%;
@@ -281,10 +284,18 @@
   object-fit: contain;
   padding: 8px;
 }
-.categoryCard:hover {
+.categoryCard:hover,
+.categoryCard:focus-visible {
   border-color: var(--accent);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 22px #00000030;
 }
-.categoryCard:hover img {
+.categoryCard:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.categoryCard:hover img,
+.categoryCard:focus-visible img {
   transform: scale(1.04);
 }
 .categoryCard > div {
@@ -300,6 +311,11 @@
 .categoryCard svg {
   align-self: end;
   margin-top: auto;
+  transition: transform 0.3s ease;
+}
+.categoryCard:hover svg,
+.categoryCard:focus-visible svg {
+  transform: translateX(3px);
 }
 .about {
   background: #f8f8f6;
@@ -561,10 +577,17 @@
   .serviceCard,
   .categoryCard,
   .categoryCard img,
+  .categoryCard svg,
   .serviceMedia img {
     transition: none;
   }
-  .serviceCard:hover {
+  .serviceCard:hover,
+  .categoryCard:hover,
+  .categoryCard:focus-visible,
+  .categoryCard:hover img,
+  .categoryCard:focus-visible img,
+  .categoryCard:hover svg,
+  .categoryCard:focus-visible svg {
     transform: none;
   }
 }

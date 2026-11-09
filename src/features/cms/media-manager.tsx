@@ -3,6 +3,7 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { uploadMedia, updateMedia, deleteMedia } from "@/server/media-actions";
+import { MAX_MEDIA_BYTES, MAX_MEDIA_LABEL } from "./media-limits";
 type Asset = {
   id: string;
   name: string;
@@ -115,8 +116,8 @@ export function MediaManager({ assets }: { assets: Asset[] }) {
           <p className="eyebrow">IMAGES & DOCUMENTS</p>
           <h1>Médiathèque</h1>
           <p className="muted">
-            Images JPEG, PNG, WebP, AVIF, GIF et documents PDF · 5 Mo maximum
-            par fichier.
+            Images JPEG, PNG, WebP, AVIF, GIF et documents PDF ·{" "}
+            {MAX_MEDIA_LABEL} maximum par fichier.
           </p>
         </div>
       </div>
@@ -126,6 +127,11 @@ export function MediaManager({ assets }: { assets: Asset[] }) {
           e.preventDefault();
           const form = e.currentTarget;
           const data = new FormData(form);
+          const file = data.get("file");
+          if (file instanceof File && file.size > MAX_MEDIA_BYTES) {
+            setMessage(`Choisissez un fichier de ${MAX_MEDIA_LABEL} maximum.`);
+            return;
+          }
           setMessage("");
           startTransition(async () => {
             try {

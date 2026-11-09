@@ -25,7 +25,7 @@ docker compose --env-file .env.production -f compose.production.yml up -d app ht
 
 Se connecter à `/connexion`, ouvrir `/admin`, cocher la confirmation et utiliser **Initialiser les contenus du site**. Cette opération transactionnelle importe les 17 produits du document fourni, les six catégories et leurs photos, ainsi que les paramètres et textes manquants. Elle peut être répétée : les références et contenus déjà présents sont conservés. Elle ne crée aucun client ni aucune donnée commerciale de démonstration.
 
-Les images importées et téléversées sont conservées en PostgreSQL. Le PDF source de présentation est livré dans `public/documents`. Les téléversements administrateur sont limités à 5 Mo par fichier ; le PDF source livré, plus volumineux, ne doit pas être réimporté par ce formulaire.
+Les images importées et téléversées sont conservées en PostgreSQL. Le PDF source de présentation est livré dans `public/documents`. Les téléversements administrateur sont limités à 3 Mo par fichier ; le PDF source livré, plus volumineux, ne doit pas être réimporté par ce formulaire.
 
 Depuis le dashboard :
 

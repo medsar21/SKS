@@ -4,6 +4,8 @@ Plateforme B2B pour SKS PROJETS · développement et intégration MNH Technologi
 
 ## Hébergement en production
 
+Pour Vercel, suivre le [guide Vercel](deploy/VERCEL.md) : variables PostgreSQL et Better Auth, migrations au build et initialisation du contenu.
+
 Voir le [guide de déploiement](deploy/PRODUCTION.md) : configuration HTTPS/PostgreSQL, migrations, premier administrateur et import du PDF depuis le dashboard. Les variables requises sont dans `.env.production.example`. La production utilise exclusivement le catalogue en base.
 
 ## Démarrage local

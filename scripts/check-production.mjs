@@ -1,5 +1,5 @@
-import { loadEnvConfig } from "@next/env";
-loadEnvConfig(process.cwd(), false);
+import nextEnv from "@next/env";
+nextEnv.loadEnvConfig(process.cwd(), false);
 export function checkProduction(env = process.env) {
   const errors = [];
   try {

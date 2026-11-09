@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const config: NextConfig = {
-  output: "standalone",
+  ...(process.env.VERCEL === "1" ? {} : { output: "standalone" as const }),
+  outputFileTracingIncludes: {
+    "/admin": ["./public/images/**/*"],
+    "/icon": ["./public/images/**/*"],
+  },
   distDir: process.env.SKS_TEST_BUILD === "true" ? ".next-test" : ".next",
   allowedDevOrigins: ["localhost", "127.0.0.1"],
   turbopack: { root: process.cwd() },
