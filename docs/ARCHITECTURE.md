@@ -1,6 +1,6 @@
 # SKS Business Platform
 
-Intégration : MNH Technologie. Première mission : socle exécutable, pas l'intégralité du MVP.
+Première mission : socle exécutable, pas l'intégralité du MVP.
 
 ## Choix
 

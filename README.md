@@ -1,6 +1,6 @@
 # SKS Business Platform
 
-Plateforme B2B pour SKS PROJETS · développement et intégration MNH Technologie.
+Plateforme B2B pour SKS PROJETS.
 
 ## Hébergement en production
 

@@ -77,7 +77,7 @@ export function WorkspaceShell({
           {children}
         </main>
         <footer className="workspace-footer">
-          Administration SKS PROJETS · MNH Technologie
+          Administration SKS PROJETS
         </footer>
       </div>
     </div>

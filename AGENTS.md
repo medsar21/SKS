@@ -1,4 +1,4 @@
-# SKS Business Platform — MNH Technologie
+# SKS Business Platform
 
 - Monolithe Next.js App Router, TypeScript strict. Pas de serveur séparé.
 - Français par défaut ; préparer fr/ar/en, RTL arabe, MAD, Africa/Casablanca.

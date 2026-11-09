@@ -52,7 +52,6 @@ const labels: Record<string, string> = {
   footerText: "Présentation du pied de page",
   footerLinks: "Liens du pied de page",
   copyright: "Mention en bas du site",
-  credit: "Crédit",
   email: "Email de contact",
   phone: "Téléphone",
   phoneSecondary: "Deuxième téléphone",

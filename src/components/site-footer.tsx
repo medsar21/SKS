@@ -93,7 +93,6 @@ export function SiteFooter() {
         )}
         <div className="footer-bottom">
           <span>{settings.copyright}</span>
-          <span>{settings.credit}</span>
         </div>
       </Container>
     </footer>
