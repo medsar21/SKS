@@ -34,6 +34,9 @@ test("@managed logos : brouillon, publication, animation, pause et retrait", asy
     name: "Logos des références",
     exact: true,
   });
+  await expect(
+    logos.getByRole("button", { name: "+ Ajouter un logo", exact: true }),
+  ).toBeVisible();
   while (await logos.getByRole("button", { name: /Retirer/ }).count())
     await logos
       .getByRole("button", { name: /Retirer/ })
@@ -105,7 +108,10 @@ test("@managed logos : brouillon, publication, animation, pause et retrait", asy
       "Publication retirée",
     );
     await visitor.reload();
-    await expect(visitor.locator("#references")).toHaveCount(0);
+    await expect(visitor.locator("#references img")).toHaveCount(0);
+    await expect(
+      visitor.getByRole("heading", { name: "Nos références", exact: true }),
+    ).toBeVisible();
     await expect(visitor.getByRole("heading", { level: 1 })).toBeVisible();
   } finally {
     await visitors.close();
