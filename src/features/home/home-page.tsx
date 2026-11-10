@@ -80,9 +80,6 @@ export function HomePage({ products }: { products: CatalogProduct[] }) {
                 <Link href="/services">{t("Nos services")}</Link>
               </Button>
             </div>
-            <span className={styles.sourceLabel}>
-              {t("Visuel de la présentation SKS PROJETS")}
-            </span>
           </Container>
         </section>
         <section
