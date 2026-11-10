@@ -81,7 +81,32 @@ const companyProfileSchema = z.object({
   }),
 });
 const seoPage = z.object({ title: short, description: z.string().max(1000) });
+export const calendlyUrlSchema = z
+  .string()
+  .trim()
+  .max(500)
+  .refine((value) => {
+    if (!value) return true;
+    try {
+      const url = new URL(value);
+      return (
+        url.protocol === "https:" &&
+        ["calendly.com", "www.calendly.com"].includes(url.hostname) &&
+        !url.username &&
+        !url.password &&
+        !url.port &&
+        url.pathname !== "/"
+      );
+    } catch {
+      return false;
+    }
+  }, "Indiquez un lien de rendez-vous https://calendly.com/… ou laissez vide.");
 export const settingsSchema = z.object({
+  externalLinks: z
+    .object({
+      calendlyUrl: calendlyUrlSchema.default(""),
+    })
+    .default({ calendlyUrl: "" }),
   brand: short,
   brandSub: z.string().max(80),
   logo: imagePath,
@@ -175,6 +200,7 @@ export const settingsSchema = z.object({
 });
 export type SiteSettings = z.infer<typeof settingsSchema>;
 export const defaultSettings: SiteSettings = {
+  externalLinks: { calendlyUrl: "" },
   brand: "SKS",
   brandSub: "PROJETS",
   logo: "",

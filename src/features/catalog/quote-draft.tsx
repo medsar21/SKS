@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Download, LockKeyhole } from "lucide-react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { MeetingBookingButton } from "@/features/quotes/meeting-booking-button";
 import { useSiteContent } from "@/features/cms/site-content";
 import { quoteRequestSchema } from "@/features/quotes/validation";
 import { sendQuoteRequest } from "@/server/quote-actions";
@@ -116,6 +117,7 @@ export function QuoteDraft({
             "Votre demande sera étudiée. Elle ne constitue pas un devis ni une réservation.",
           )}
         </p>
+        <MeetingBookingButton />
       </section>
     );
   return (
@@ -338,6 +340,7 @@ export function QuoteDraft({
             <Download size={17} aria-hidden="true" />
           )}
         </Button>
+        <MeetingBookingButton />
         {!available && settings.email && (
           <span>
             {t("À transmettre à ")}

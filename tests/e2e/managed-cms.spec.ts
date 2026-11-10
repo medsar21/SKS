@@ -78,6 +78,8 @@ test("@managed admin : import, photo, brouillon, publication et demande persista
 
   console.log("Media upload verified");
   await page.goto("/admin/edition/site");
+  const bookingUrl = "https://calendly.com/sks-isolated-demo/meeting";
+  await page.getByLabel("Lien Calendly", { exact: false }).fill(bookingUrl);
   const hero = page.getByRole("group", {
     name: "Bannière principale",
     exact: true,
@@ -120,11 +122,9 @@ test("@managed admin : import, photo, brouillon, publication et demande persista
     );
     // Les cartes de catégories et les fiches produit utilisent aussi la base.
     await page.goto("/admin/categories");
-    const category = page
-      .locator("details")
-      .filter({
-        has: page.locator("summary", { hasText: "Coffrage Vertical" }),
-      });
+    const category = page.locator("details").filter({
+      has: page.locator("summary", { hasText: "Coffrage Vertical" }),
+    });
     await category.locator("summary").click();
     await category
       .getByLabel("Photo de la catégorie", { exact: true })
@@ -163,6 +163,11 @@ test("@managed admin : import, photo, brouillon, publication et demande persista
       visitor.getByRole("heading", { name: "Système VERSATEC", exact: true }),
     ).toBeVisible();
     await visitor.goto(`${origin}/contact?produit=systeme-versatec`);
+    const booking = visitor.getByRole("link", {
+      name: "Prendre un rendez-vous Teams",
+    });
+    await expect(booking).toHaveAttribute("href", bookingUrl);
+    await expect(booking).toHaveAttribute("target", "_blank");
     await visitor.getByLabel("Nom et prénom").fill("Client de test isolé");
     await visitor
       .getByLabel(/^Société/)
@@ -184,6 +189,7 @@ test("@managed admin : import, photo, brouillon, publication et demande persista
       .getByRole("status")
       .locator("strong")
       .textContent();
+    await expect(booking).toHaveAttribute("href", bookingUrl);
     await page.goto("/admin/devis");
     await expect(page.getByRole("link", { name: reference! })).toBeVisible();
     await visitor.goto(`${origin}/admin/edition/site`);

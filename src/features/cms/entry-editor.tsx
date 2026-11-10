@@ -268,14 +268,26 @@ export function EntryEditor({
                   })}
               </>
             ) : (
-              <FieldTree
-                value={body}
-                media={media}
-                onChange={(v) => {
-                  setBody(v);
-                  setDirty(true);
-                }}
-              />
+              <>
+                <p
+                  className="muted"
+                  hidden={entry.kind !== "SETTINGS" || key !== "site"}
+                >
+                  Dans « Configuration des liens externes », renseignez votre
+                  lien Calendly puis publiez. Configurez Microsoft Teams comme
+                  lieu de réunion dans Calendly. Un lien vide masque le bouton
+                  de rendez-vous. Les liens du menu et du pied de page se
+                  modifient dans leurs rubriques respectives.
+                </p>
+                <FieldTree
+                  value={body}
+                  media={media}
+                  onChange={(v) => {
+                    setBody(v);
+                    setDirty(true);
+                  }}
+                />
+              </>
             )}
           </div>
           <div className="cms-savebar">

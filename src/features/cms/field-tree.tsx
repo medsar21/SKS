@@ -9,6 +9,8 @@ export type MediaChoice = {
   name: string;
 };
 const labels: Record<string, string> = {
+  externalLinks: "Configuration des liens externes",
+  calendlyUrl: "Lien Calendly — rendez-vous Teams (vide : bouton masqué)",
   logos: "Logos des références",
   heading: "Titre de section",
   description: "Description",

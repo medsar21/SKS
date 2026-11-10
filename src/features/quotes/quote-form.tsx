@@ -3,6 +3,7 @@ import { useSiteContent } from "@/features/cms/site-content";
 import { useState, useTransition, type FormEvent } from "react";
 import { sendQuoteRequest } from "@/server/quote-actions";
 import { Button } from "@/components/ui/button";
+import { MeetingBookingButton } from "./meeting-booking-button";
 
 type ProductOption = {
   sku: string;
@@ -78,6 +79,7 @@ export function QuoteForm({
             "Conservez cette référence. Votre demande sera étudiée ; elle ne constitue pas un devis ni une réservation.",
           )}
         </p>
+        <MeetingBookingButton />
       </div>
     );
   return (
@@ -288,6 +290,7 @@ export function QuoteForm({
         >
           {pending ? t("Enregistrement…") : t("Envoyer ma demande")}
         </Button>
+        <MeetingBookingButton />
       </fieldset>
     </form>
   );

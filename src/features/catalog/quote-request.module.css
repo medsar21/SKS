@@ -150,7 +150,7 @@
   font-size: 12px;
   border-radius: 5px;
 }
-.submit > a,
+.submit > a:not([data-slot="button"]),
 .back {
   font-size: 11px;
   color: #6e787f;
