@@ -2,6 +2,13 @@ import nextEnv from "@next/env";
 nextEnv.loadEnvConfig(process.cwd(), false);
 export function checkProduction(env = process.env) {
   const errors = [];
+  if (
+    Boolean(env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) !==
+    Boolean(env.TURNSTILE_SECRET_KEY)
+  )
+    errors.push(
+      "Turnstile : renseignez NEXT_PUBLIC_TURNSTILE_SITE_KEY et TURNSTILE_SECRET_KEY ensemble.",
+    );
   try {
     const db = new URL(env.DATABASE_URL ?? "");
     if (

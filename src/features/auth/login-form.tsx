@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { TurnstileWidget } from "./turnstile-widget";
 const schema = z.object({
   email: z.email("Adresse email invalide"),
   password: z.string().min(1, "Mot de passe requis").max(128),
@@ -16,6 +17,9 @@ export function LoginForm({ configured }: { configured: boolean }) {
 
   const router = useRouter();
   const [error, setError] = useState("");
+  const [token, setToken] = useState("");
+  const [challengeVersion, setChallengeVersion] = useState(0);
+  const challengeEnabled = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
   const {
     register,
     handleSubmit,
@@ -23,10 +27,17 @@ export function LoginForm({ configured }: { configured: boolean }) {
   } = useForm<Values>({ resolver: zodResolver(schema) });
   async function submit(values: Values) {
     setError("");
+    if (challengeEnabled && !token) {
+      setError("Veuillez terminer la vérification anti-robot.");
+      return;
+    }
     try {
       const response = await fetch("/api/auth/sign-in/email", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-turnstile-token": token,
+        },
         body: JSON.stringify(values),
       });
       if (!response.ok) {
@@ -37,12 +48,19 @@ export function LoginForm({ configured }: { configured: boolean }) {
           typeof errorBody === "object" &&
           "code" in errorBody &&
           errorBody.code === "INVALID_ORIGIN";
+        const challengeFailed =
+          errorBody !== null &&
+          typeof errorBody === "object" &&
+          "code" in errorBody &&
+          errorBody.code === "TURNSTILE_FAILED";
         setError(
-          invalidOrigin
-            ? "Ce domaine n’est pas autorisé pour la connexion. Contactez l’administrateur."
-            : response.status === 429
-              ? "Trop de tentatives. Réessayez dans une minute."
-              : "Connexion impossible. Vérifiez vos identifiants ou contactez votre administrateur.",
+          challengeFailed
+            ? "Vérification anti-robot expirée ou refusée. Réessayez."
+            : invalidOrigin
+              ? "Ce domaine n’est pas autorisé pour la connexion. Contactez l’administrateur."
+              : response.status === 429
+                ? "Trop de tentatives. Réessayez dans une minute."
+                : "Connexion impossible. Vérifiez vos identifiants ou contactez votre administrateur.",
         );
         return;
       }
@@ -50,6 +68,9 @@ export function LoginForm({ configured }: { configured: boolean }) {
       router.refresh();
     } catch {
       setError("Le service est momentanément inaccessible.");
+    } finally {
+      setToken("");
+      setChallengeVersion((version) => version + 1);
     }
   }
   return (
@@ -92,7 +113,14 @@ export function LoginForm({ configured }: { configured: boolean }) {
             </span>
           )}
         </label>
-        <Button className="w-full" type="submit">
+        {configured && challengeEnabled && (
+          <TurnstileWidget key={challengeVersion} onToken={setToken} />
+        )}
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={challengeEnabled && !token}
+        >
           {isSubmitting ? "Connexion…" : "Se connecter"}
         </Button>
       </fieldset>

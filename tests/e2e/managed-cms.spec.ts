@@ -79,7 +79,6 @@ test("@managed admin : import, photo, brouillon, publication et demande persista
   console.log("Media upload verified");
   await page.goto("/admin/edition/site");
   const bookingUrl = "https://calendly.com/sks-isolated-demo/meeting";
-  await page.getByLabel("Lien Calendly", { exact: false }).fill(bookingUrl);
   const hero = page.getByRole("group", {
     name: "Bannière principale",
     exact: true,
@@ -90,6 +89,10 @@ test("@managed admin : import, photo, brouillon, publication et demande persista
     .fill(heroAlt);
   const title = `Titre de test isolé ${randomUUID().slice(0, 8)}`;
   await page.getByLabel("Titre SEO", { exact: true }).fill(title);
+  await page.getByLabel("Lien Calendly", { exact: false }).fill(bookingUrl);
+  await expect(page.getByLabel("Lien Calendly", { exact: false })).toHaveValue(
+    bookingUrl,
+  );
   await page.getByRole("button", { name: "Enregistrer le brouillon" }).click();
   await expect(page.locator("p[role=status]")).toContainText(
     "Brouillon enregistré",
